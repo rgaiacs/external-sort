@@ -21,3 +21,13 @@ MIT.
 -   `helper.jl`
 
     Contains functions to help at the tests, e.g. create files.
+
+## Testing
+
+~~~
+$ julia es-test.jl
+~~~
+
+## Using
+
+This is only a proof of concept.

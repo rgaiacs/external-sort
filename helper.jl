@@ -23,3 +23,28 @@ function read_file2screen(file_name="sample.bin")
     end
     close(file)
 end
+
+"""
+Read file to array.
+"""
+function read_file2array(file_name="sample.bin")
+    file = open(file_name, "r")
+    array2return = Array(UInt32, 1)
+    while ~ eof(file)
+        push!(array2return, read(file, UInt32))
+    end
+    close(file)
+    return array2return
+end
+
+"""
+Check external sort.
+"""
+function check_sort(input_filename="sample.bin", sorted_filename="sorted-sample.bin")
+    input = read_file2array(input_filename)
+    sort!(input)
+
+    sorted = read_file2array(sorted_filename)
+
+    return input == sorted
+end
