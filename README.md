@@ -7,3 +7,17 @@ this restriction will need to be artificial.
 ## License
 
 MIT.
+
+## Description
+
+-   `es.jl`
+
+    Contains the implementation of the external sort.
+
+-   `es-test.jl`
+
+    Contains the test for external sort.
+
+-   `helper.jl`
+
+    Contains functions to help at the tests, e.g. create files.
