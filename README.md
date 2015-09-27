@@ -8,6 +8,12 @@ this restriction will need to be artificial.
 
 MIT.
 
+## Requirements
+
+-   [Julia](http://julialang.org/)
+
+    Tested with version 0.5.0-dev (262d6babf634181c456868182f972a90240a5863).
+
 ## Description
 
 -   `es.jl`
