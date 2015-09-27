@@ -18,7 +18,16 @@ function external_sort(max_memory,
     bin_names = Array(ASCIIString,0)
     number_of_bins = 0
     while ~ eof(input_file)
-        temporary_vector = read(input_file, UInt32, max_memory)
+        temporary_vector = Array(UInt32, 0)
+        # The loop is needed because otherwise it can raise
+        # "EOFError: read end of file"
+        for i in 1:max_memory
+            if eof(input_file)
+                break
+            else
+                push!(temporary_vector, read(input_file, UInt32))
+            end
+        end
         sort!(temporary_vector)
 
         number_of_bins += 1
