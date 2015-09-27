@@ -39,6 +39,12 @@ function external_sort(max_memory,
     end
     close(input_file)
 
+    # if number_of_bins is 1 we already have the solution
+    if number_of_bins == 1
+        mv(bin_names[1], output_filename, remove_destination=true)
+        return
+    end
+
     # Phase 2
     #
     # 1. Read the first max_memory / (number_of_bins + 1) of each sorted chunk into
@@ -85,6 +91,8 @@ function external_sort(max_memory,
         end
     end
     close(output_file)
+
+    return
 end
 
 """
