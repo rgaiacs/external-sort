@@ -62,7 +62,7 @@ function external_sort(max_memory,
     end
 
     # Read first chunk
-    input_buffer = Dict()
+    input_buffer = Array(Array{UInt32}, number_of_bins)
     for i in 1:number_of_bins
         input_buffer[i] = Array(UInt32, 0)
         get_new_chunk(input_buffer[i], bin_files[i], size_of_sorted_chunk)
@@ -118,7 +118,7 @@ end
 Check if input buffer is empty.
 """
 function input_buffer_is_empty(input_buffer)
-    for chunck in values(input_buffer)
+    for chunck in input_buffer
         if length(chunck) != 0
             return false
         end
