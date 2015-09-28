@@ -28,6 +28,10 @@ MIT.
 
     Contains functions to help at the tests, e.g. create files.
 
+-   `main.jl`
+
+    Command line wrapper for external sort.
+
 ## Testing
 
 ~~~
@@ -36,4 +40,4 @@ $ julia es-test.jl
 
 ## Using
 
-This is only a proof of concept.
+Check `main.jl`.
