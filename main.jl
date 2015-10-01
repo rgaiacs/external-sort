@@ -11,8 +11,8 @@ include("es.jl")
 include("helper.jl")
 
 if length(ARGS) == 2
-    N = parse(UInt32, ARGS[1])
-    M = parse(UInt32, ARGS[2])
+    N = parse(Int32, ARGS[1])
+    M = parse(Int32, ARGS[2])
 end
 
 create_file(N)

@@ -32,12 +32,33 @@ MIT.
 
     Command line wrapper for external sort.
 
+-   `pes.jl`
+
+    Contains the implementation of the parallel external sort.
+
+-   `pes-test.jl`
+
+    Contans the test for parallel external sort.
+
+-   `phelper.hl`
+
+    Contains functions to help at the parallel external sort,
+    i.e. functions that need to be load at all machines.
+
 ## Testing
+
+For the single machine version:
 
 ~~~
 $ julia es-test.jl
 ~~~
 
-## Using
+For the multi machine version:
+
+~~~
+$ julia -p 2 pes-test.jl
+~~~
+
+## Using the single machine version
 
 Check `main.jl`.

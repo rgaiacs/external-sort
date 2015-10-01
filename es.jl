@@ -18,20 +18,20 @@ function external_sort(max_memory,
     bin_names = Array(ASCIIString,0)
     number_of_bins = 0
     while ~ eof(input_file)
-        temporary_vector = Array(UInt32, 0)
+        temporary_vector = Array(Int32, 0)
         # The loop is needed because otherwise it can raise
         # "EOFError: read end of file"
         for i in 1:max_memory
             if eof(input_file)
                 break
             else
-                push!(temporary_vector, read(input_file, UInt32))
+                push!(temporary_vector, read(input_file, Int32))
             end
         end
         sort!(temporary_vector)
 
         number_of_bins += 1
-        bin_name = string("bin-", number_of_bins)
+        bin_name = string("bin-", number_of_bins, ".bin")
         push!(bin_names, bin_name)
         output_file = open(bin_name, "w")
         write(output_file, temporary_vector)
@@ -45,6 +45,14 @@ function external_sort(max_memory,
         return
     end
 
+    external_sort_phase2(max_memory,
+                        [string("bin-", i, ".bin") for i in 1:number_of_bins],
+                        output_filename)
+end
+
+function external_sort_phase2(max_memory,
+                              input_filename_list,
+                              output_filename="sorted-sample.bin")
     # Phase 2
     #
     # 1. Read the first max_memory / (number_of_bins + 1) of each sorted chunk into
@@ -54,6 +62,8 @@ function external_sort(max_memory,
     #    Whenever the output buffer fills, write it to the final sorted file and empty it.
     #    Whenever any of the 9 input buffers empties, fill it with the next
     #    sorted chunk until no more data from the chunk is available.
+    number_of_bins = length(input_filename_list)
+
     size_of_sorted_chunk = floor(Integer, max_memory / (number_of_bins + 1))
     if size_of_sorted_chunk == 0
         error("Number of bins is too large. Need more memory.")
@@ -64,20 +74,17 @@ function external_sort(max_memory,
     # Open all bins
     bin_files = Array(IOStream, number_of_bins)
     for i in 1:number_of_bins
-        bin_files[i] = open(bin_names[i], "r")
+        bin_files[i] = open(input_filename_list[i], "r")
     end
 
     # Read first chunk
-    input_buffer = Array(Array{UInt32}, number_of_bins)
+    input_buffer = Array(Array{Int32}, number_of_bins)
     for i in 1:number_of_bins
-        input_buffer[i] = Array(UInt32, 0)
+        input_buffer[i] = Array(Int32, 0)
         get_new_chunk(input_buffer[i], bin_files[i], size_of_sorted_chunk)
-        # for j in 1:size_of_sorted_chunk
-        #     input_buffer[i][j] = read(bin_files[i], UInt32)
-        # end
     end
 
-    while ~ input_buffer_is_empty(input_buffer) && ~ bins_are_close(bin_files)
+    while ~ input_buffer_is_empty(input_buffer)
         selected_bin = get_first_non_empty_input_buffer(input_buffer)
         for i in selected_bin + 1:number_of_bins
             if length(input_buffer[i]) > 0 && input_buffer[i][1] < input_buffer[selected_bin][1]
@@ -96,6 +103,29 @@ function external_sort(max_memory,
 end
 
 """
+Write chunck of data to file.
+"""
+function write_chunck_to_file(chunck,
+                              output_filename)
+
+    output_file = open(output_filename, "a")
+    write(output_file, chunck)
+    close(output_file)
+end
+
+"""
+Sort and Write chunck of data to file.
+"""
+function sort_and_write_chunck_to_file(chunck,
+                                       output_filename)
+    sort!(chunck)
+    output_file = open(output_filename, "a")
+    write(output_file, chunck)
+    close(output_file)
+end
+
+
+"""
 Get new chunck of sorted data.
 """
 function get_new_chunk(input_buffer_array,
@@ -105,7 +135,7 @@ function get_new_chunk(input_buffer_array,
         if eof(input_file_stream)
             close(input_file_stream)
         else
-            push!(input_buffer_array, read(input_file_stream, UInt32))
+            push!(input_buffer_array, read(input_file_stream, Int32))
         end
     end
 end
