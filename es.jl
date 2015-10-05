@@ -50,6 +50,11 @@ function external_sort(max_memory,
                         output_filename)
 end
 
+"""
+Second phase of external sort
+
+We reuse the function at the parallel version.
+"""
 function external_sort_phase2(max_memory,
                               input_filename_list,
                               output_filename="sorted-sample.bin")
