@@ -51,9 +51,11 @@ function parallel_external_sort(number_of_machines,
             push!(files_on_machines[machine],
                   string("machine-", machine, "-", length(files_on_machines[machine]) + 1 ,"-sample.bin"))
             remotecall_wait(machine,
-                       sort_and_write_chunck_to_file,
+                       write_chunck_to_file,
                        temporary_vector,
-                       files_on_machines[machine][end])
+                       files_on_machines[machine][end],
+                       true,
+                       false)
         end
     end
     close(input_file)

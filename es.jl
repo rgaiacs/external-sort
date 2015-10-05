@@ -106,24 +106,22 @@ end
 Write chunck of data to file.
 """
 function write_chunck_to_file(chunck,
-                              output_filename)
+                              output_filename,
+                              sort=false,
+                              append=true)
+    if sort
+        sort!(chunck)
+    end
 
-    output_file = open(output_filename, "a")
+    if append
+        mode = "a"
+    else
+        mode = "w"
+    end
+    output_file = open(output_filename, mode)
     write(output_file, chunck)
     close(output_file)
 end
-
-"""
-Sort and Write chunck of data to file.
-"""
-function sort_and_write_chunck_to_file(chunck,
-                                       output_filename)
-    sort!(chunck)
-    output_file = open(output_filename, "a")
-    write(output_file, chunck)
-    close(output_file)
-end
-
 
 """
 Get new chunck of sorted data.
