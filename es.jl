@@ -139,18 +139,6 @@ function get_new_chunk(input_buffer_array,
 end
 
 """
-Check if all temporary files are close.
-"""
-function bins_are_close(bins)
-    for file in bins
-        if isopen(file)
-            return false
-        end
-    end
-    return true
-end
-
-"""
 Check if input buffer is empty.
 """
 function input_buffer_is_empty(input_buffer)

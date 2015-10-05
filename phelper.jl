@@ -32,15 +32,3 @@ function parallel_get_new_chunk(input_file_name,
 
     return input_buffer_array, new_input_position
 end
-
-"""
-Check if no more data on remote machines.
-"""
-function remote_machines_are_empty(input_remote_files_position)
-    for position in input_remote_files_position
-        if position != -1
-            return false
-        end
-    end
-    return true
-end
