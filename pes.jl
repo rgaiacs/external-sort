@@ -29,7 +29,7 @@ function parallel_external_sort(number_of_machines,
 
     # 2. Send data over network.
     input_file = open(input_filename, "r")
-    while ~ eof(input_file)
+    @sync while ~ eof(input_file)
         for machine in 1:number_of_machines
             temporary_vector = Array(Int32, 0)
             # The loop is needed because otherwise it can raise
@@ -50,7 +50,7 @@ function parallel_external_sort(number_of_machines,
 
             push!(files_on_machines[machine],
                   string("machine-", machine, "-", length(files_on_machines[machine]) + 1 ,"-sample.bin"))
-            remotecall_wait(machine,
+            remotecall(machine,
                        write_chunck_to_file,
                        temporary_vector,
                        files_on_machines[machine][end],
@@ -63,7 +63,7 @@ function parallel_external_sort(number_of_machines,
     # 3. Sort files on remote machine
     #    using the single machine version.
     @sync for machine in 1:number_of_machines
-        remotecall_wait(machine,
+        remotecall(machine,
                         external_sort_phase2,
                         max_memory,
                         files_on_machines[machine],
